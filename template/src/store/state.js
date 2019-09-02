@@ -1,3 +1,5 @@
+// set
+let defaultname = '';
 try {
   if (localStorage.name) {
     defaultname = localStorage.name;
