@@ -7,10 +7,8 @@ import App from './App'
 {{#router}}
 import router from './router'
 {{/router}}
-{{#vuex}}  //vuex为true的时候就会写入这些
-import Vuex from 'vuex'
+{{#vuex}}
 import store from  './store/index'
-Vue.use(Vuex)
 {{/vuex}}
 
 Vue.config.productionTip = false
