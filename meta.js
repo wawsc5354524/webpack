@@ -133,6 +133,33 @@ module.exports = {
       type: 'confirm',
       message: 'Setup e2e tests with Nightwatch?',
     },
+    vuex: {
+      when: 'isNotTest',
+      type: 'confirm',
+      message: 'Install vuex?',
+    },
+    styles: {
+      when: 'isNotTest && unit',
+      type: 'list',
+      message: 'pick a css preCompile',
+      choices: [
+        {
+          name: 'less',
+          value: 'less',
+          short: 'less',
+        },
+        {
+          name: 'sass',
+          value: 'sass',
+          short: 'sass',
+        },
+        {
+          name: 'stylus',
+          value: 'stylus',
+          short: 'stylus',
+        },
+      ],
+    },
     autoInstall: {
       when: 'isNotTest',
       type: 'list',
