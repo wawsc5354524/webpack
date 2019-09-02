@@ -139,7 +139,7 @@ module.exports = {
       message: 'Install vuex?',
     },
     styles: {
-      when: 'isNotTest && unit',
+      when: 'isNotTest',
       type: 'list',
       message: 'pick a css preCompile',
       choices: [
