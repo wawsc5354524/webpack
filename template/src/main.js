@@ -11,7 +11,31 @@ import router from './router'
 import store from  './store/index'
 {{/vuex}}
 
-Vue.config.productionTip = false
+import "babel-polyfill";
+import "./utils/flexible";
+import "./styles/reset.css";
+import "./styles/border.css";
+import "vant/lib/index.css";
+import "./styles/theme.less";
+import fastClick from "fastclick";
+import http from "./services/http";
+import VueJsonp from "vue-jsonp";
+import { Button, NavBar, Tabbar, TabbarItem,Skeleton } from "vant";
+Vue.use(Button)
+  .use(NavBar)
+  .use(Tabbar)
+  .use(TabbarItem)
+  .use(Skeleton);
+Vue.use(VueJsonp);
+
+Vue.config.productionTip = false;
+
+fastClick.attach(document.body);
+Vue.prototype.$http = http;
+
+let BUS = new Vue();
+Vue.prototype.BUS = BUS;
+
 
 /* eslint-disable no-new */
 new Vue({
