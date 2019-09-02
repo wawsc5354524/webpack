@@ -3,7 +3,7 @@ import store from "../store";
 
 // 创建axios实例
 const http = axios.create({
-  baseURL: "//m.yaoex.com", // baseURL
+  baseURL: "yourBaseURL", // baseURL
   timeout: 1000 * 10 // 10S
 });
 
