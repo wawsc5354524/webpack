@@ -1,44 +1,88 @@
+/**
+ * 封装axios,暴露GET,POST方法
+ */
 import axios from "axios";
-import store from "../store";
+import qs from "qs";
+import { Toast } from "vant";
 
-// 创建axios实例
-const http = axios.create({
-  baseURL: "yourBaseURL", // baseURL
-  timeout: 1000 * 10 // 10S
-});
+// 配置
+axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
+axios.defaults.timeout = 10 * 1000;
+axios.defaults.baseURL = "yourBaseUrl";
 
-// request拦截器,在请求之前做一些处理
-http.interceptors.request.use(
-  config => {
-    // 请求头拼TOKEN
-    if (store.state.token) {
-      config.headers["laohu-token"] = store.state.token;
+// 请求拦截器
+var num = 0;
+axios.interceptors.request.use(
+    config => {
+        num++;
+        Toast.loading({
+            message: "加载中"
+        });
+        return config;
+    },
+    error => {
+        return Promise.error(error);
     }
-    return config;
-  },
-  error => {
-    console.log(error); // for debug
-    Promise.reject(error);
-  }
 );
 
-// response 拦截器,数据返回后进行一些处理
-http.interceptors.response.use(
-  response => {
-    /**
-     * code为非200是抛错 可结合自己业务进行修改
-     */
-    const res = response.data;
-    if (res.code == 200) {
-      return res;
-    } else if (res.code == "666") {
-      console.log("其他再进行针对处理");
-    } else {
-      Promise.reject(res.msg);
+// 响应拦截器
+axios.interceptors.response.use(
+    response => {
+        num--;
+        if (num <= 0) {
+            Toast.clear();
+        }
+        if (response.status === 200) {
+            return Promise.resolve(response);
+        }else{
+          // 针对不同的错误码进行相关处理
+        }
+    },
+    error => {
+        Toast.clear();
+        Toast({
+            message: "网络异常",
+            position: "center",
+            duration: 1000
+        });
+        return Promise.reject(error);
     }
-  },
-  error => {
-    Promise.reject("网络异常");
-  }
 );
-export default http;
+
+/**
+ * GET
+ * @param {String} url
+ * @param {Object} params
+ */
+export function get(url, params) {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(url, {
+                params: params
+            })
+            .then(res => {
+                resolve(res.data);
+            })
+            .catch(err => {
+                reject(err.data);
+            });
+    });
+}
+
+/**
+ * POST
+ * @param {String} url
+ * @param {Object} params
+ */
+export function post(url, params) {
+    return new Promise((resolve, reject) => {
+        axios
+            .post(url, qs.stringify(params))
+            .then(res => {
+                resolve(res.data);
+            })
+            .catch(err => {
+                reject(err.data);
+            });
+    });
+}

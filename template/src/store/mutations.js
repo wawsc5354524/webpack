@@ -1,8 +1,5 @@
 export default {
-    changeName(state, data) {
+    setName(state, data) {
         state.name = data;
-        try {
-            localStorage.name = data;
-        } catch (e) {}
     }
 };
